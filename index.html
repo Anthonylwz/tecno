@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechUniverse - El Mayor Centro de Tecnología Avanzada</title>
+  <!-- Fuente personalizada y Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #3a86ff;
+      --primary-dark: #2667cc;
+      --secondary-color: #8338ec;
+      --accent-color: #ff006e;
+      --dark-color: #0a1128;
+      --gray-dark: #343a40;
+      --gray-medium: #6c757d;
+      --gray-light: #f8f9fa;
+      --success-color: #06d6a0;
+      --warning-color: #ffbe0b;
+      --danger-color: #dc3545;
+      --info-color: #17a2b8;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      color: var(--gray-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* Estilos generales */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .section-padding {
+      padding: 4rem 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    
+    .section-title h2 {
+      font-size: 2.5rem;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    
+    .section-title h2::after {
+      content: '';
+      width: 100px;
+      height: 4px;
+      background: var(--primary-color);
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .section-title p {
+      font-size: 1.2rem;
+      color: var(--gray-medium);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: var(--primary-color);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    }
+    
+    .btn-secondary { background: var(--secondary-color); }
+    .btn-accent { background: var(--accent-color); }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    .btn-outline:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .text-center { text-align: center; }
+    .text-primary { color: var(--primary-color); }
+    .text-secondary { color: var(--secondary-color); }
+    .text-accent { color: var(--accent-color); }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: white;
+    }
+    
+    .badge-sale { background-color: var(--success-color); }
+    
+    /* Topbar */
+    .topbar {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+    
+    .topbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .topbar-contact {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .topbar-contact a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .topbar-contact a:hover { color: var(--primary-color); }
+    
+    .topbar-socials {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .topbar-socials a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .topbar-socials a:hover { color: var(--primary-color); }
+    
+    /* Header Middle (con buscador) */
+    .header-middle {
+      padding: 1.5rem 0;
+      background: white;
+    }
+    
+    .header-middle-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo span { color: var(--primary-color); }
+    
+    .search-bar {
+      flex: 0 0 40%;
+      position: relative;
+    }
+    
+    .search-bar input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 2.5rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .search-bar input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    
+    .search-bar i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-medium);
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    
+    .action-item {
+      position: relative;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .action-item:hover { transform: scale(1.1); }
+    
+    .action-item i { font-size: 1.5rem; color: var(--gray-dark); }
+    
+    .action-item span { display: block; font-size: 0.8rem; margin-top: 0.25rem; }
+    
+    .badge-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 20px;
+      height: 20px;
+      background: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+    
+    /* Main Navigation */
+    .main-nav {
+      background: var(--primary-color);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .main-nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .category-menu { position: relative; margin-right: 1rem; }
+    
+    .category-btn {
+      background: var(--dark-color);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.3s ease;
+    }
+    
+    .category-btn:hover { background: var(--primary-dark); }
+    
+    .mega-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 250px;
+      background: white;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      border-radius: 0 0 5px 5px;
+      display: none;
+      z-index: 100;
+    }
+    
+    .category-menu:hover .mega-menu { display: block; }
+    
+    .mega-menu ul { list-style: none; }
+    
+    .mega-menu ul li a {
+      display: block;
+      padding: 0.8rem 1.5rem;
+      text-decoration: none;
+      color: var(--gray-dark);
+      transition: all 0.3s ease;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .mega-menu ul li a:hover {
+      background: #f8f9fa;
+      padding-left: 1.8rem;
+      color: var(--primary-color);
+    }
+    
+    .mega-menu ul li i.fa-chevron-right {
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      color: var(--gray-medium);
+    }
+    
+    .submenu {
+      position: absolute;
+      left: 100%;
+      top: 0;
+      width: 250px;
+      background: white;
+      box-shadow: 5px 10px 20px rgba(0,0,0,0.1);
+      display: none;
+      border-radius: 0 5px 5px 0;
+    }
+    
+    .mega-menu ul li:hover .submenu { display: block; }
+    
+    .nav-links { display: flex; list-style: none; }
+    
+    .nav-links li { position: relative; }
+    
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1.2rem;
+      display: block;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-links li a:hover { color: var(--gray-light); }
+    
+    .nav-links li.active a {
+      background: rgba(255,255,255,0.2);
+      border-radius: 5px;
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    /* Hero Slider */
+    .hero-slider {
+      position: relative;
+      height: 600px;
+      overflow: hidden;
+    }
+    
+    .slide {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    
+    .slide.active { opacity: 1; }
+    
+    .slide-img {
+      position: absolute;
+      top: 50%;
+      right: 10%;
+      width: 300px;
+      height: 300px;
+      transform: translateY(-50%);
+      z-index: 0;
+    }
+    
+    .slide-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .slide-content {
+      position: relative;
+      z-index: 1;
+      margin-left: 10%;
+      color: white;
+      animation: fadeInUp 1s ease forwards;
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .slide-title { font-size: 3rem; margin-bottom: 1rem; }
+    .slide-description { font-size: 1.2rem; margin-bottom: 2rem; }
+    
+    .slider-controls {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .slider-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .slider-dot.active {
+      background: white;
+      transform: scale(1.2);
+    }
+    
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .slider-arrow:hover { background: var(--primary-color); }
+    .slider-arrow.prev { left: 20px; }
+    .slider-arrow.next { right: 20px; }
+    
+    /* Banner Features */
+    .banner-features {
+      background: white;
+      padding: 2rem 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin-top: -50px;
+      position: relative;
+      z-index: 10;
+      border-radius: 10px;
+    }
+    
+    .features-container {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 2rem;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+    
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(58,134,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      transition: transform 0.3s ease;
+    }
+    
+    .feature-item:hover .feature-icon { transform: scale(1.1); }
+    
+    .feature-content h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+    .feature-content p { font-size: 0.9rem; color: var(--gray-medium); }
+    
+    /* Popular Products */
+    .popular-products { background: white; }
+    
+    .product-filters {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .filter-btn {
+      padding: 0.5rem 1.5rem;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 5px;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .products-container.grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    
+    .carousel-container {
+      overflow: hidden;
+      position: relative;
+      margin-top: 20px;
+    }
+    
+    .products-carousel {
+      display: flex;
+      gap: 20px;
+      width: max-content;
+      animation: slideLeft 120s linear infinite;
+    }
+    
+    .products-carousel:hover { animation-play-state: paused; }
+    
+    @keyframes slideLeft {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      position: relative;
+      width: 280px;
+      flex-shrink: 0;
+      margin: 10px;
+    }
+    
+    .product-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+    
+    .product-badge { position: absolute; top: 15px; left: 15px; z-index: 10; }
+    
+    .product-image {
+      height: 220px;
+      background-color: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .product-image img {
+      max-width: 80%;
+      max-height: 80%;
+      transition: transform 0.5s ease;
+    }
+    
+    .product-card:hover .product-image img { transform: scale(1.1); }
+    
+    .product-action {
+      position: absolute;
+      bottom: -50px;
+      left: 0;
+      width: 100%;
+      background: rgba(58,134,255,0.9);
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      transition: all 0.3s ease;
+    }
+    
+    .product-card:hover .product-action { bottom: 0; }
+    
+    .action-btn {
+      width: 40px;
+      height: 40px;
+      background: white;
+      color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .action-btn:hover { background: var(--dark-color); color: white; }
+    
+    .product-content { padding: 1.5rem; }
+    
+    .product-category {
+      font-size: 0.85rem;
+      color: var(--gray-medium);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .product-content h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      transition: color 0.3s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .product-card:hover .product-content h3 { color: var(--primary-color); }
+    
+    .price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .old-price {
+      font-size: 1rem;
+      color: var(--gray-medium);
+      text-decoration: line-through;
+    }
+    
+    .load-more { text-align: center; margin-top: 3rem; }
+    
+    /* Sección de Marcas */
+    .brands { background: var(--gray-light); }
+    
+    .brands-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+      gap: 2rem;
+    }
+    
+    .brand-item {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100px;
+      filter: grayscale(100%);
+      transition: all 0.3s ease;
+    }
+    
+    .brand-item:hover { filter: grayscale(0%); transform: scale(1.05); }
+    
+    .brand-item img { max-width: 100%; max-height: 100%; }
+    
+    /* Footer */
+    .footer {
+      background: var(--dark-color);
+      color: white;
+      padding: 2rem 0;
+    }
+    
+    .footer-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+      gap: 2rem;
+    }
+    
+    .footer-widget h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    
+    .footer-widget h3::after {
+      content: '';
+      width: 50px;
+      height: 3px;
+      background: var(--primary-color);
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+    
+    .footer-widget ul { list-style: none; }
+    
+    .footer-widget ul li { margin-bottom: 0.5rem; }
+    
+    .footer-widget ul li a {
+      color: var(--gray-medium);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-widget ul li a:hover { color: white; }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 1rem;
+      border-top: 1px solid #444;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--gray-medium);
+    }
+    
+    /* Carrito */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: none;
+    }
+    
+    .cart-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 12px;
+      z-index: 2001;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      padding: 20px;
+      display: none;
+    }
+    
+    .cart-header {
+      font-size: 1.5em;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .cart-items { margin-bottom: 20px; }
+    
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .cart-item img {
+      border-radius: 5px;
+      margin-right: 15px;
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+    }
+    
+    .cart-item-info h4 { font-size: 1.1rem; margin-bottom: 5px; }
+    
+    .cart-item-actions button {
+      border: none;
+      background: var(--primary-color);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin-right: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .cart-item-actions button:hover { background: var(--primary-dark); }
+    
+    .cart-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+    
+    /* Modales */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 3000;
+      display: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      z-index: 3001;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      padding: 1rem;
+      display: none;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    
+    /* Modal de Detalle de Producto */
+    #product-detail-modal { animation: modalFadeIn 0.5s ease-out; }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translate(-50%, -45%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f1f1f1;
+      padding: 1rem;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 1rem;
+    }
+    
+    .modal-content {
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+    
+    .modal-content img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-middle-container { flex-direction: column; align-items: center; }
+      .search-bar { width: 100%; margin-top: 10px; }
+      .nav-links { flex-direction: column; align-items: center; }
+      .nav-links li { margin-bottom: 10px; }
+      .mobile-menu-btn { display: block; }
+      .main-nav-container { flex-direction: column; }
+      .products-container.grid { flex-direction: column; align-items: center; }
+      .features-container { grid-template-columns: 1fr 1fr; }
+      .footer-container { grid-template-columns: 1fr; }
+      .slide-img { width: 200px; height: 200px; right: 5%; }
+    }
+
+    /* Floating WhatsApp Contact */
+    .whatsapp-contact {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+    .whatsapp-contact a {
+      color: white;
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
+    .whatsapp-contact .close-btn {
+      margin-left: 10px;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="container topbar-container">
+      <div class="topbar-contact">
+        <a href="tel:+123456789">+51 902871820</a>
+        <a href="mailto:info@techuniverse.com">correo@electronico</a>
+      </div>
+      <div class="topbar-socials">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Header Middle (con buscador) -->
+  <header class="header-middle">
+    <div class="container header-middle-container">
+      <div class="logo">
+        Tech<span>Universe</span>
+      </div>
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input id="search-input" type="text" placeholder="Buscar productos...">
+      </div>
+      <div class="header-actions">
+        <div class="action-item">
+          <i class="fas fa-user"></i>
+          <span>Cuenta</span>
+        </div>
+        <div class="action-item" id="favorites-toggle">
+          <i class="fas fa-heart"></i>
+          <span>Favoritos</span>
+        </div>
+        <div class="action-item" id="cart-toggle">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Carrito</span>
+          <div class="badge-count">3</div>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Main Navigation -->
+  <nav class="main-nav">
+    <div class="container main-nav-container">
+      <div class="category-menu">
+        <button class="category-btn">
+          Categorías <i class="fas fa-bars"></i>
+        </button>
+        <div class="mega-menu">
+          <ul>
+            <li>
+              <a href="#">Laptops <i class="fas fa-chevron-right"></i></a>
+              <div class="submenu">
+                <ul>
+                  <li><a href="#">Gaming</a></li>
+                  <li><a href="#">Ultrabooks</a></li>
+                  <li><a href="#">2 en 1</a></li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <a href="#">Smartphones <i class="fas fa-chevron-right"></i></a>
+              <div class="submenu">
+                <ul>
+                  <li><a href="#">Android</a></li>
+                  <li><a href="#">iOS</a></li>
+                  <li><a href="#">Accesorios</a></li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <a href="#">Accesorios <i class="fas fa-chevron-right"></i></a>
+              <div class="submenu">
+                <ul>
+                  <li><a href="#">Auriculares</a></li>
+                  <li><a href="#">Teclados</a></li>
+                  <li><a href="#">Ratones</a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li class="active"><a href="#">Inicio</a></li>
+        <li><a href="#">Tienda</a></li>
+        <li><a href="#">Ofertas</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+    </div>
+  </nav>
+  
+  <!-- Hero Slider -->
+  <section class="hero-slider">
+    <div class="slide slide-1 active">
+      <div class="slide-img">
+        <img src="imagenes/laptopasus.jpg" alt="Innovación sin límites">
+      </div>
+      <div class="slide-content">
+        <h2 class="slide-title">Innovación sin límites</h2>
+        <p class="slide-description">Descubre las últimas tendencias en tecnología y gadgets.</p>
+        <a href="#" class="btn btn-secondary">Ver más</a>
+      </div>
+    </div>
+    <div class="slide slide-2">
+      <div class="slide-img">
+        <img src="imagenes/iphone14.jpg" alt="Potencia tu productividad">
+      </div>
+      <div class="slide-content">
+        <h2 class="slide-title">Potencia tu productividad</h2>
+        <p class="slide-description">Equipos y accesorios de alta gama para profesionales.</p>
+        <a href="#" class="btn btn-secondary">Explorar</a>
+      </div>
+    </div>
+    <div class="slide slide-3">
+      <div class="slide-img">
+        <img src="imagenes/laptoplegion.jpg" alt="Tecnología en tu vida">
+      </div>
+      <div class="slide-content">
+        <h2 class="slide-title">Tecnología en tu vida</h2>
+        <p class="slide-description">Soluciones innovadoras para un mundo conectado.</p>
+        <a href="#" class="btn btn-secondary">Comprar ahora</a>
+      </div>
+    </div>
+    <div class="slider-controls">
+      <span class="slider-dot active" data-slide="0"></span>
+      <span class="slider-dot" data-slide="1"></span>
+      <span class="slider-dot" data-slide="2"></span>
+    </div>
+    <div class="slider-arrow prev"><i class="fas fa-chevron-left"></i></div>
+    <div class="slider-arrow next"><i class="fas fa-chevron-right"></i></div>
+  </section>
+  
+  <!-- Banner Features -->
+  <section class="banner-features">
+    <div class="container features-container">
+      <div class="feature-item">
+        <div class="feature-icon"><i class="fas fa-truck"></i></div>
+        <div class="feature-content">
+          <h3>Envío Gratis</h3>
+          <p>Para compras superiores a $50</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><i class="fas fa-headset"></i></div>
+        <div class="feature-content">
+          <h3>Soporte 24/7</h3>
+          <p>Estamos para ayudarte siempre</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+        <div class="feature-content">
+          <h3>Devoluciones Fáciles</h3>
+          <p>Garantía de satisfacción</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon"><i class="fas fa-lock"></i></div>
+        <div class="feature-content">
+          <h3>Pago Seguro</h3>
+          <p>Transacciones encriptadas</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Sección de Marcas -->
+  <center><h1>Marcas</h1></center>
+  <section class="section-padding brands">
+    <div class="container brands-container">
+      <div class="brand-item">
+        <img src="imagenes/asus.jpg" alt="Marca 1">
+      </div>
+      <div class="brand-item">
+        <img src="imagenes/legion.png" alt="Marca 2">
+      </div>
+      <div class="brand-item">
+        <img src="imagenes/hp.png" alt="Marca 3">
+      </div>
+      <div class="brand-item">
+        <img src="imagenes/laptop1.jpg" alt="Marca 4">
+      </div>
+    </div>
+  </section>
+  
+  <!-- Popular Products -->
+  <section class="section-padding popular-products">
+    <div class="container">
+      <div class="section-title">
+        <h2>Productos Populares</h2>
+        <p>Descubre nuestros productos más vendidos</p>
+      </div>
+      <div class="product-filters">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="laptops">Laptops</button>
+        <button class="filter-btn" data-filter="smartphones">Smartphones</button>
+        <button class="filter-btn" data-filter="accessories">Accesorios</button>
+      </div>
+      <div class="products-container grid" id="productsContainer">
+        <!-- Productos Laptops -->
+        <div class="product-card" data-category="laptops" data-ram="8GB" data-brand="Dell" data-storage="256GB">
+          <div class="product-badge"><span class="badge badge-sale">Oferta</span></div>
+          <div class="product-image">
+            <img src="imagenes/laptop1.jpg" alt="Portátil Ultra Thin">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="1" data-name="Portátil Ultra Thin" data-price="999">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="1">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="1">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Laptops</span>
+            <h3>Portátil Ultra Thin</h3>
+            <div class="price">$999 <span class="old-price">$1299</span></div>
+          </div>
+        </div>
+        <div class="product-card" data-category="laptops" data-ram="16GB" data-brand="MSI" data-storage="512GB">
+          <div class="product-image">
+            <img src="imagenes/laptophp.jpg" alt="Laptop Gamer Pro">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="4" data-name="Laptop Gamer Pro" data-price="1199">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="4">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="4">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Laptops</span>
+            <h3>Laptop Gamer Pro</h3>
+            <div class="price">$1199 <span class="old-price">$1399</span></div>
+          </div>
+        </div>
+        <div class="product-card" data-category="laptops" data-ram="8GB" data-brand="Apple" data-storage="256GB">
+          <div class="product-image">
+            <img src="imagenes/laptop1.jpg" alt="Ultrabook Elegante">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="5" data-name="Ultrabook Elegante" data-price="1099">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="5">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="5">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Laptops</span>
+            <h3>Ultrabook Elegante</h3>
+            <div class="price">$1099</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="laptops" data-ram="8GB" data-brand="ASUS" data-storage="512GB">
+          <div class="product-image">
+            <img src="imagenes/laptopasus.jpg" alt="Laptop Asus ZenBook">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="10" data-name="Laptop Asus ZenBook" data-price="899">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="10">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="10">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Laptops</span>
+            <h3>Laptop Asus ZenBook</h3>
+            <div class="price">$899</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="laptops" data-ram="8GB" data-brand="HP" data-storage="256GB">
+          <div class="product-image">
+            <img src="imagenes/laptophp.jpg" alt="HP Pavilion">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="11" data-name="HP Pavilion" data-price="799">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="11">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="11">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Laptops</span>
+            <h3>HP Pavilion</h3>
+            <div class="price">$799</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="laptops" data-ram="16GB" data-brand="Lenovo" data-storage="512GB">
+          <div class="product-image">
+            <img src="imagenes/laptop1.jpg" alt="Lenovo ThinkPad">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="12" data-name="Lenovo ThinkPad" data-price="999">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="12">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="12">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Laptops</span>
+            <h3>Lenovo ThinkPad</h3>
+            <div class="price">$999</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="laptops" data-ram="16GB" data-brand="Legion" data-storage="1TB">
+          <div class="product-image">
+            <img src="imagenes/laptoplegion.jpg" alt="Legion Y Series">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="13" data-name="Legion Y Series" data-price="1199">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="13">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="13">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Laptops</span>
+            <h3>Legion Y Series</h3>
+            <div class="price">$1199</div>
+          </div>
+        </div>
+        
+        <!-- Productos Smartphones -->
+        <div class="product-card" data-category="smartphones" data-ram="4GB" data-brand="Generic" data-storage="64GB">
+          <div class="product-image">
+            <img src="imagenes/s22.jpg" alt="Móvil Inteligente">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="2" data-name="Móvil Inteligente" data-price="799">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="2">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="2">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Smartphones</span>
+            <h3>Móvil Inteligente</h3>
+            <div class="price">$799</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="smartphones" data-ram="6GB" data-brand="Generic" data-storage="128GB">
+          <div class="product-image">
+            <img src="imagenes/s22.jpg" alt="Smartphone X Pro">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="6" data-name="Smartphone X Pro" data-price="899">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="6">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="6">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Smartphones</span>
+            <h3>Smartphone X Pro</h3>
+            <div class="price">$899 <span class="old-price">$999</span></div>
+          </div>
+        </div>
+        <div class="product-card" data-category="smartphones" data-ram="2GB" data-brand="Generic" data-storage="32GB">
+          <div class="product-image">
+            <img src="imagenes/s22.jpg" alt="Móvil Económico">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="7" data-name="Móvil Económico" data-price="499">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="7">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="7">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Smartphones</span>
+            <h3>Móvil Económico</h3>
+            <div class="price">$499</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="smartphones" data-ram="8GB" data-brand="Samsung" data-storage="128GB">
+          <div class="product-image">
+            <img src="imagenes/s22.jpg" alt="Samsung Galaxy S22">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="14" data-name="Samsung Galaxy S22" data-price="899">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="14">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="14">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Smartphones</span>
+            <h3>Samsung Galaxy S22</h3>
+            <div class="price">$899</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="smartphones" data-ram="6GB" data-brand="Apple" data-storage="128GB">
+          <div class="product-image">
+            <img src="imagenes/iphone14.jpg" alt="iPhone 14">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="15" data-name="iPhone 14" data-price="1099">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="15">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="15">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Smartphones</span>
+            <h3>iPhone 14</h3>
+            <div class="price">$1099</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="smartphones" data-ram="4GB" data-brand="Xiaomi" data-storage="64GB">
+          <div class="product-image">
+            <img src="imagenes/xiomi.avif" alt="Xiaomi Redmi Note 11">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="19" data-name="Xiaomi Redmi Note 11" data-price="399">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="19">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="19">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Smartphones</span>
+            <h3>Xiaomi Redmi Note 11</h3>
+            <div class="price">$399</div>
+          </div>
+        </div>
+        
+        <!-- Productos Accesorios -->
+        <div class="product-card" data-category="accessories" data-ram="N/A" data-brand="Logitech" data-storage="N/A">
+          <div class="product-image">
+            <img src="imagenes/audifono1.jpg" alt="Auriculares Inalámbricos">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="3" data-name="Auriculares Inalámbricos" data-price="199">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="3">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="3">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Accesorios</span>
+            <h3>Auriculares Inalámbricos</h3>
+            <div class="price">$199 <span class="old-price">$249</span></div>
+          </div>
+        </div>
+        <div class="product-card" data-category="accessories" data-ram="N/A" data-brand="Corsair" data-storage="N/A">
+          <div class="product-image">
+            <img src="imagenes/teclado.jpg" alt="Teclado Mecánico RGB">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="8" data-name="Teclado Mecánico RGB" data-price="149">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="8">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="8">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Accesorios</span>
+            <h3>Teclado Mecánico RGB</h3>
+            <div class="price">$149 <span class="old-price">$199</span></div>
+          </div>
+        </div>
+        <div class="product-card" data-category="accessories" data-ram="N/A" data-brand="Logitech" data-storage="N/A">
+          <div class="product-image">
+            <img src="imagenes/mause.jpg" alt="Ratón Inalámbrico">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="9" data-name="Ratón Inalámbrico" data-price="99">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="9">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="9">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Accesorios</span>
+            <h3>Ratón Inalámbrico</h3>
+            <div class="price">$99</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="accessories" data-ram="N/A" data-brand="Anker" data-storage="N/A">
+          <div class="product-image">
+            <img src="imagenes/usb.jpg" alt="USB Hub 4 Puertos">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="16" data-name="USB Hub 4 Puertos" data-price="49">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="16">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="16">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Accesorios</span>
+            <h3>USB Hub 4 Puertos</h3>
+            <div class="price">$49</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="accessories" data-ram="N/A" data-brand="Razer" data-storage="N/A">
+          <div class="product-image">
+            <img src="imagenes/mausepad.jpg" alt="Mouse Pad Gamer">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="17" data-name="Mouse Pad Gamer" data-price="29">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="17">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="17">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Accesorios</span>
+            <h3>Mouse Pad Gamer</h3>
+            <div class="price">$29</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="accessories" data-ram="N/A" data-brand="AmazonBasics" data-storage="N/A">
+          <div class="product-image">
+            <img src="imagenes/fundalaptop.jpg" alt="Funda para Laptop">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="18" data-name="Funda para Laptop" data-price="39">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="18">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="18">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Accesorios</span>
+            <h3>Funda para Laptop</h3>
+            <div class="price">$39</div>
+          </div>
+        </div>
+        <div class="product-card" data-category="accessories" data-ram="N/A" data-brand="Anker" data-storage="N/A">
+          <div class="product-image">
+            <img src="imagenes/cargadorina.jpg" alt="Cargador Inalámbrico">
+          </div>
+          <div class="product-action">
+            <button class="action-btn add-to-cart" data-id="20" data-name="Cargador Inalámbrico" data-price="59">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+            <button class="action-btn add-favorite" data-id="20">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="action-btn view-details" data-id="20">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Accesorios</span>
+            <h3>Cargador Inalámbrico</h3>
+            <div class="price">$59</div>
+          </div>
+        </div>
+      </div>
+      <div class="load-more">
+        <a href="#" class="btn btn-outline">Cargar más productos</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-widget">
+        <h3>Sobre Nosotros</h3>
+        <p>TechUniverse es el mayor centro de tecnología avanzada, comprometido a brindar los mejores productos y servicios a nuestros clientes.</p>
+      </div>
+      <div class="footer-widget">
+        <h3>Enlaces Rápidos</h3>
+        <ul>
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#">Tienda</a></li>
+          <li><a href="#">Ofertas</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-widget">
+        <h3>Contáctanos</h3>
+        <ul>
+          <li>+1 234 567 89</li>
+          <li>info@techuniverse.com</li>
+          <li>123 Tech Street, Ciudad Tecnológica</li>
+        </ul>
+      </div>
+      <div class="footer-widget">
+        <h3>Síguenos</h3>
+        <ul>
+          <li><a href="#"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+          <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+          <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+          <li><a href="#"><i class="fab fa-linkedin-in"></i> LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      &copy; 2025 TechUniverse. Todos los derechos reservados.
+    </div>
+  </footer>
+  
+  <!-- Modal del Carrito -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <div class="cart-container" id="cart-container">
+    <div class="cart-header">
+      <h2>Tu Carrito</h2>
+      <button id="close-cart" class="btn btn-outline">Cerrar</button>
+    </div>
+    <div class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total">Total: $<span>0.00</span></div>
+      <button class="btn btn-accent" id="checkout-btn">Pagar con WhatsApp</button>
+    </div>
+  </div>
+  
+  <!-- Modal de Detalle de Producto -->
+  <div class="modal-overlay" id="product-detail-overlay"></div>
+  <div class="modal-container" id="product-detail-modal">
+    <div class="modal-header">
+      <h2 id="detail-product-name">Detalle del Producto</h2>
+      <button id="close-detail" class="btn btn-outline">Cerrar</button>
+    </div>
+    <div class="modal-content">
+      <img id="detail-product-image" src="" alt="Imagen del Producto">
+      <p id="detail-product-description"></p>
+      <p id="detail-product-price"></p>
+    </div>
+  </div>
+  
+  <!-- Modal de Favoritos -->
+  <div class="modal-overlay" id="favorites-overlay"></div>
+  <div class="modal-container" id="favorites-modal">
+    <div class="modal-header">
+      <h2>Favoritos</h2>
+      <button id="close-favorites" class="btn btn-outline">Cerrar</button>
+    </div>
+    <div class="modal-content" id="favorites-content">
+      <!-- Aquí se inyectarán los productos favoritos -->
+    </div>
+  </div>
+  
+  <!-- Floating WhatsApp Contact -->
+  <div class="whatsapp-contact">
+    <a href="https://wa.me/51902871820" target="_blank">
+      <H6>Alex</H6>
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <span class="close-btn">&times;</span>
+  </div>
+  <script>
+    // Slider principal
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    const nextBtn = document.querySelector('.slider-arrow.next');
+    const prevBtn = document.querySelector('.slider-arrow.prev');
+    
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        dots[i].classList.remove('active');
+        if (i === index) {
+          slide.classList.add('active');
+          dots[i].classList.add('active');
+        }
+      });
+      currentSlide = index;
+    }
+    
+    nextBtn.addEventListener('click', () => { showSlide((currentSlide + 1) % slides.length); });
+    prevBtn.addEventListener('click', () => { showSlide((currentSlide - 1 + slides.length) % slides.length); });
+    dots.forEach(dot => { dot.addEventListener('click', () => { showSlide(parseInt(dot.getAttribute('data-slide'))); }); });
+    setInterval(() => { showSlide((currentSlide + 1) % slides.length); }, 5000);
+    
+    // Filtrado de productos
+    const productsContainer = document.getElementById('productsContainer');
+    const productCards = Array.from(document.querySelectorAll('.product-card'));
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelector('.filter-btn.active').classList.remove('active');
+        button.classList.add('active');
+        let filter = button.getAttribute('data-filter');
+        if (filter === 'all') {
+          productsContainer.classList.add('carousel-container', 'products-carousel');
+          productCards.forEach(card => { card.style.display = 'inline-block'; });
+        } else {
+          productsContainer.classList.remove('carousel-container', 'products-carousel');
+          productCards.forEach(card => {
+            card.style.display = (card.getAttribute('data-category') === filter) ? 'inline-block' : 'none';
+          });
+        }
+      });
+    });
+    
+    window.addEventListener('load', () => { productsContainer.classList.add('carousel-container', 'products-carousel'); });
+    
+    document.getElementById('search-input').addEventListener('keyup', function() {
+      productsContainer.classList.remove('carousel-container', 'products-carousel');
+      let searchText = this.value.toLowerCase();
+      productCards.forEach(card => {
+        let title = card.querySelector('.product-content h3').innerText.toLowerCase();
+        card.style.display = title.includes(searchText) ? 'inline-block' : 'none';
+      });
+    });
+    
+    class Cart {
+      constructor() {
+        this.cart = JSON.parse(localStorage.getItem('cart')) || [];
+        this.updateCartDisplay();
+      }
+    
+      addItem(product) {
+        const existingItem = this.cart.find(item => item.id === product.id);
+        if (existingItem) { existingItem.quantity++; }
+        else { this.cart.push({ ...product, quantity: 1 }); }
+        this.saveCart();
+      }
+    
+      removeItem(id) {
+        this.cart = this.cart.filter(item => item.id !== id);
+        this.saveCart();
+      }
+    
+      updateQuantity(id, quantity) {
+        const item = this.cart.find(item => item.id === id);
+        if (item) {
+          item.quantity = quantity;
+          if (item.quantity < 1) this.removeItem(id);
+          this.saveCart();
+        }
+      }
+    
+      saveCart() {
+        localStorage.setItem('cart', JSON.stringify(this.cart));
+        this.updateCartDisplay();
+      }
+    
+      updateCartDisplay() {
+        const cartItems = document.querySelector('.cart-items');
+        const cartTotal = document.querySelector('.cart-total span');
+        const cartCount = document.querySelectorAll('.badge-count');
+        cartItems.innerHTML = this.cart.map(item => `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}">
+            <div class="cart-item-info">
+              <h4>${item.name}</h4>
+              <p>$${item.price} x ${item.quantity}</p>
+              <div class="cart-item-actions">
+                <button onclick="cart.updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                <span>${item.quantity}</span>
+                <button onclick="cart.updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                <button onclick="cart.removeItem(${item.id})" class="text-danger">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+        const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        cartTotal.textContent = total.toFixed(2);
+        const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.forEach(badge => badge.textContent = totalItems);
+      }
+    }
+    
+    const cart = new Cart();
+    
+    document.getElementById('cart-toggle').addEventListener('click', function() {
+      document.getElementById('cart-overlay').style.display = 'block';
+      document.getElementById('cart-container').style.display = 'block';
+    });
+    
+    document.getElementById('close-cart').addEventListener('click', function() {
+      document.getElementById('cart-overlay').style.display = 'none';
+      document.getElementById('cart-container').style.display = 'none';
+    });
+    
+    // Obtener la imagen directamente desde la tarjeta del producto
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', function() {
+        const productCard = button.closest('.product-card');
+        const product = {
+          id: parseInt(button.getAttribute('data-id')),
+          name: button.getAttribute('data-name'),
+          price: parseFloat(button.getAttribute('data-price')),
+          image: productCard.querySelector('.product-image img').src
+        };
+        cart.addItem(product);
+        alert(product.name + " agregado al carrito");
+      });
+    });
+    
+    Cart.prototype.checkout = function() {
+      if (this.cart.length === 0) { alert("El carrito está vacío"); return; }
+      let message = "Hola, deseo pagar los siguientes productos:\n";
+      this.cart.forEach(item => { message += `${item.name} - $${item.price} x ${item.quantity}\n`; });
+      let total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      message += "Total: $" + total.toFixed(2);
+      let whatsappNumber = "51902871820";
+      let url = "https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(message);
+      window.open(url, "_blank");
+    };
+    
+    document.getElementById('checkout-btn').addEventListener('click', function() { cart.checkout(); });
+    
+    function showProductDetail(productCard) {
+      const name = productCard.querySelector('.product-content h3').innerText;
+      const price = productCard.querySelector('.price').innerText;
+      const image = productCard.querySelector('.product-image img').src;
+      const description = "Esta es una descripción detallada del producto " + name + ". Aquí encontrarás características, beneficios y toda la información necesaria para tomar una decisión informada.";
+      const ram = productCard.dataset.ram || "N/A";
+      const brand = productCard.dataset.brand || "N/A";
+      const storage = productCard.dataset.storage || "N/A";
+      document.getElementById('detail-product-name').innerText = name;
+      document.getElementById('detail-product-image').src = image;
+      document.getElementById('detail-product-description').innerHTML = description + "<br><strong>RAM:</strong> " + ram + " | <strong>Marca:</strong> " + brand + " | <strong>Almacenamiento:</strong> " + storage;
+      document.getElementById('detail-product-price').innerText = "Precio: " + price;
+      document.getElementById('product-detail-overlay').style.display = 'block';
+      document.getElementById('product-detail-modal').style.display = 'block';
+    }
+    
+    document.querySelectorAll('.view-details').forEach(button => {
+      button.addEventListener('click', function() {
+        const productCard = button.closest('.product-card');
+        showProductDetail(productCard);
+      });
+    });
+    
+    document.getElementById('close-detail').addEventListener('click', function() {
+      document.getElementById('product-detail-overlay').style.display = 'none';
+      document.getElementById('product-detail-modal').style.display = 'none';
+    });
+    
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    
+    function updateFavoritesDisplay() {
+      const favoritesContent = document.getElementById('favorites-content');
+      if (favorites.length === 0) {
+        favoritesContent.innerHTML = "<p>No tienes productos favoritos.</p>";
+        return;
+      }
+      favoritesContent.innerHTML = favorites.map(item => `
+        <div style="margin-bottom:10px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+          <img src="${item.image}" alt="${item.name}" style="width:50px; vertical-align:middle; margin-right:10px;">
+          <span>${item.name} - $${item.price}</span>
+        </div>
+      `).join('');
+    }
+    
+    function addFavorite(product) {
+      if (!favorites.find(item => item.id === product.id)) {
+        favorites.push(product);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        alert(product.name + " agregado a favoritos");
+      } else {
+        alert(product.name + " ya está en favoritos");
+      }
+    }
+    
+    document.querySelectorAll('.add-favorite').forEach(button => {
+      button.addEventListener('click', function() {
+        const productCard = button.closest('.product-card');
+        const product = {
+          id: parseInt(button.getAttribute('data-id')),
+          name: productCard.querySelector('.product-content h3').innerText,
+          price: parseFloat(productCard.querySelector('.price').innerText.replace(/[^0-9\.]/g, '')),
+          image: productCard.querySelector('.product-image img').src
+        };
+        addFavorite(product);
+      });
+    });
+    
+    document.getElementById('favorites-toggle').addEventListener('click', function() {
+      updateFavoritesDisplay();
+      document.getElementById('favorites-overlay').style.display = 'block';
+      document.getElementById('favorites-modal').style.display = 'block';
+    });
+    
+    document.getElementById('close-favorites').addEventListener('click', function() {
+      document.getElementById('favorites-overlay').style.display = 'none';
+      document.getElementById('favorites-modal').style.display = 'none';
+    });
+    
+    // Ocultar el icono flotante de WhatsApp al hacer clic en la "X"
+    document.querySelector('.whatsapp-contact .close-btn').addEventListener('click', function() {
+      document.querySelector('.whatsapp-contact').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
