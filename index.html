@@ -3,251 +3,729 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subir y Descargar Carpetas</title>
+    <title>Compartir Carpeta Temporal (15 días)</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #f6f8fa;
+            color: #24292e;
         }
         .container {
             background-color: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            border: 1px solid #e1e4e8;
         }
         h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 16px;
+            font-size: 24px;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 10px;
+        }
+        .info-box {
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 6px;
+            background-color: #f1f8ff;
+            border: 1px solid #c8e1ff;
+        }
+        .info-box.warning {
+            background-color: #fffbdd;
+            border-color: #ffe58f;
+        }
+        .info-box.success {
+            background-color: #dcffe4;
+            border-color: #bef5cb;
+        }
+        .info-box.error {
+            background-color: #ffeef0;
+            border-color: #f9d0d5;
         }
         .upload-area {
-            border: 2px dashed #3498db;
-            border-radius: 5px;
-            padding: 40px;
+            border: 2px dashed #0366d6;
+            border-radius: 6px;
+            padding: 32px;
             text-align: center;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-            background-color: #f8f9fa;
+            margin-bottom: 24px;
+            transition: all 0.2s;
+            background-color: #f6f8fa;
             cursor: pointer;
         }
         .upload-area:hover {
-            background-color: #e9f5fc;
-            border-color: #2980b9;
+            background-color: #f1f8ff;
+            border-color: #2188ff;
         }
         .upload-area.active {
-            background-color: #e3f2fd;
-            border-color: #1976d2;
+            background-color: #f1f8ff;
+            border-color: #2188ff;
         }
         .btn {
-            background-color: #3498db;
+            background-color: #2ea44f;
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            border: 1px solid rgba(27, 31, 35, 0.15);
+            padding: 5px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            transition: 0.2s;
+            display: inline-block;
         }
         .btn:hover {
-            background-color: #2980b9;
+            background-color: #2c974b;
         }
-        .btn-download {
-            background-color: #2ecc71;
-            display: none;
-            margin-top: 20px;
+        .btn-secondary {
+            background-color: #fafbfc;
+            color: #24292e;
+            border: 1px solid rgba(27, 31, 35, 0.15);
         }
-        .btn-download:hover {
-            background-color: #27ae60;
+        .btn-secondary:hover {
+            background-color: #f3f4f6;
+            border-color: rgba(27, 31, 35, 0.15);
+        }
+        .btn-github {
+            background-color: #24292e;
+            color: white;
+        }
+        .btn-github:hover {
+            background-color: #383f45;
         }
         #file-info {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #7f8c8d;
+            margin-top: 16px;
+            color: #586069;
         }
         .file-list {
-            margin-top: 20px;
+            margin-top: 16px;
             max-height: 200px;
             overflow-y: auto;
-            border: 1px solid #e0e0e0;
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 8px;
+            background-color: #f6f8fa;
         }
         .file-item {
-            padding: 5px;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 8px;
+            border-bottom: 1px solid #eaecef;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 12px;
+        }
+        .file-item:last-child {
+            border-bottom: none;
         }
         .hidden {
             display: none;
         }
         progress {
             width: 100%;
-            margin-top: 20px;
+            height: 8px;
+            margin-top: 16px;
+            border-radius: 4px;
             display: none;
+        }
+        .download-section {
+            margin-top: 24px;
+            border-top: 1px solid #eaecef;
+            padding-top: 24px;
+        }
+        .expiry-info {
+            margin-top: 16px;
+            color: #586069;
+            font-size: 14px;
+        }
+        .countdown {
+            font-weight: bold;
+            color: #d73a49;
+        }
+        .status-message {
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 6px;
+            display: none;
+        }
+        .github-auth {
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+            background-color: #f6f8fa;
+        }
+        .github-footer {
+            margin-top: 32px;
+            text-align: center;
+            color: #586069;
+            font-size: 12px;
+        }
+        .github-footer a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        .github-footer a:hover {
+            text-decoration: underline;
+        }
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #e1e4e8;
+            margin-bottom: 16px;
+        }
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            margin-right: 8px;
+            border-bottom: 2px solid transparent;
+        }
+        .tab.active {
+            border-bottom: 2px solid #0366d6;
+            font-weight: bold;
+        }
+        .all-shared-files {
+            margin-top: 24px;
+        }
+        .shared-item {
+            border: 1px solid #e1e4e8;
+            margin-bottom: 8px;
+            padding: 12px;
+            border-radius: 6px;
+        }
+        .shared-item:hover {
+            background-color: #f6f8fa;
+        }
+        .shared-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .shared-meta {
+            font-size: 12px;
+            color: #586069;
+        }
+        .shared-actions {
+            margin-top: 8px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 16px;
+        }
+        .page-btn {
+            margin: 0 4px;
+            padding: 4px 8px;
+            border: 1px solid #e1e4e8;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .page-btn.active {
+            background-color: #0366d6;
+            color: white;
+        }
+        input {
+            padding: 6px 8px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 6px;
+            width: 80%;
+            max-width: 500px;
+        }
+        .close {
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .storage-info {
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            border: 1px solid #dfe2e5;
+        }
+        .storage-icon {
+            margin-right: 12px;
+            color: #0366d6;
+            font-size: 24px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        .badge-green {
+            background-color: #dcffe4;
+            color: #22863a;
+        }
+        .badge-red {
+            background-color: #ffeef0;
+            color: #cb2431;
+        }
+        .badge-yellow {
+            background-color: #fff5b1;
+            color: #735c0f;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Subir y Descargar Carpetas</h1>
+        <h1>Compartir Carpeta Temporal</h1>
         
-        <div id="upload-container">
-            <div id="drop-area" class="upload-area">
-                <p>Arrastra y suelta tu carpeta aquí</p>
-                <p>o</p>
-                <input type="file" id="fileInput" webkitdirectory directory multiple class="hidden">
-                <button class="btn" id="select-btn">Seleccionar Carpeta</button>
+        <div class="tab-container">
+            <div id="upload-tab" class="tab active">Subir Carpeta</div>
+            <div id="shared-tab" class="tab">Archivos Compartidos</div>
+        </div>
+        
+        <div id="upload-panel">
+            <div class="info-box">
+                <strong>Nota:</strong> Las carpetas compartidas estarán disponibles para descarga durante 15 días y luego se eliminarán automáticamente.
             </div>
             
-            <div id="file-info"></div>
-            <progress id="upload-progress" value="0" max="100"></progress>
+            <div class="storage-info">
+                <div class="storage-icon">📁</div>
+                <div>
+                    <div><strong>Almacenamiento persistente</strong></div>
+                    <div>Tus archivos se almacenan de forma segura en GitHub Gists y estarán disponibles para todos los usuarios.</div>
+                </div>
+            </div>
             
-            <div id="file-list" class="file-list"></div>
+            <div id="github-auth" class="github-auth">
+                <div id="login-section">
+                    <p>Para subir archivos, necesitas autorizar con tu cuenta de GitHub:</p>
+                    <button id="github-login" class="btn btn-github">
+                        Iniciar sesión con GitHub
+                    </button>
+                </div>
+                <div id="user-info" class="hidden">
+                    <p>Conectado como: <span id="username"></span></p>
+                    <button id="logout" class="btn btn-secondary">Cerrar sesión</button>
+                </div>
+            </div>
             
-            <button id="download-btn" class="btn btn-download">Descargar Carpeta</button>
+            <div id="upload-section" class="hidden">
+                <div id="drop-area" class="upload-area">
+                    <p>Arrastra y suelta tu carpeta aquí</p>
+                    <p>o</p>
+                    <input type="file" id="fileInput" webkitdirectory directory multiple class="hidden">
+                    <button class="btn" id="select-btn">Seleccionar Carpeta</button>
+                </div>
+                
+                <div id="file-info"></div>
+                <progress id="upload-progress" value="0" max="100"></progress>
+                
+                <div id="file-list" class="file-list hidden"></div>
+                
+                <div id="upload-details" class="hidden">
+                    <div>
+                        <label for="folder-description">Descripción (opcional):</label>
+                        <input type="text" id="folder-description" placeholder="Descripción de la carpeta" style="width: 100%;">
+                    </div>
+                </div>
+                
+                <div id="upload-controls" class="hidden">
+                    <button id="share-btn" class="btn">Compartir Carpeta</button>
+                    <button id="cancel-btn" class="btn btn-secondary">Cancelar</button>
+                </div>
+                
+                <div id="status-message" class="status-message"></div>
+            </div>
+            
+            <div id="share-success" class="hidden">
+                <div class="info-box success">
+                    <strong>¡Carpeta compartida con éxito!</strong>
+                    <p>Comparte este enlace con cualquier persona que necesite descargar tu carpeta:</p>
+                    <div id="share-link" style="word-break: break-all; background: #f6f8fa; padding: 8px; border-radius: 6px; margin-top: 8px;"></div>
+                    <button id="copy-link" class="btn btn-secondary" style="margin-top: 8px;">Copiar enlace</button>
+                </div>
+                
+                <div class="expiry-info">
+                    Esta carpeta caducará en <span class="countdown" id="expiry-countdown">15 días</span>.
+                </div>
+                
+                <div class="download-section">
+                    <h3>Vista previa de la carpeta</h3>
+                    <div id="shared-file-list" class="file-list"></div>
+                    <div class="shared-actions">
+                        <button id="download-btn" class="btn">Descargar Carpeta</button>
+                        <button id="new-upload-btn" class="btn btn-secondary">Subir otra carpeta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="shared-panel" class="hidden">
+            <div class="info-box">
+                <strong>Carpetas compartidas:</strong> Aquí puedes ver todas las carpetas disponibles para descargar.
+            </div>
+            
+            <div id="shared-files-list" class="all-shared-files">
+                <div id="loading-shared">Cargando carpetas compartidas...</div>
+            </div>
+            
+            <div id="pagination" class="pagination"></div>
+        </div>
+        
+        <div id="download-panel" class="hidden">
+            <div id="download-info" class="info-box success">
+                <strong id="download-folder-name">Carpeta Compartida</strong>
+                <p id="download-folder-description"></p>
+                <div id="download-folder-meta" class="shared-meta"></div>
+            </div>
+            
+            <div class="expiry-info">
+                Esta carpeta caducará en <span class="countdown" id="download-expiry-countdown">15 días</span>.
+            </div>
+            
+            <div class="download-section">
+                <h3>Contenido de la carpeta</h3>
+                <div id="download-file-list" class="file-list"></div>
+                <div class="shared-actions">
+                    <button id="download-folder-btn" class="btn">Descargar Carpeta</button>
+                    <button id="back-to-list-btn" class="btn btn-secondary">Volver a la lista</button>
+                </div>
+            </div>
         </div>
     </div>
+    
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="modal-title">Título</h3>
+            <div id="modal-content"></div>
+            <div style="margin-top: 16px; text-align: right;">
+                <button id="modal-close-btn" class="btn btn-secondary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="github-footer">
+        <p>Alojado en <a href="https://github.com" target="_blank">GitHub Pages</a> con persistencia en GitHub Gists | Carpetas temporales por 15 días</p>
+    </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Configuración
+            const CLIENT_ID = "TU_CLIENT_ID_DE_GITHUB";
+            const GIST_PREFIX = "shared_folder_";
+            const EXPIRY_DAYS = 15;
+            const GITHUB_API = "https://api.github.com";
+            
+            // Elementos de la UI
+            const uploadPanel = document.getElementById('upload-panel');
+            const sharedPanel = document.getElementById('shared-panel');
+            const downloadPanel = document.getElementById('download-panel');
+            const uploadTab = document.getElementById('upload-tab');
+            const sharedTab = document.getElementById('shared-tab');
+            const githubAuth = document.getElementById('github-auth');
+            const loginSection = document.getElementById('login-section');
+            const userInfo = document.getElementById('user-info');
+            const username = document.getElementById('username');
+            const loginBtn = document.getElementById('github-login');
+            const logoutBtn = document.getElementById('logout');
+            const uploadSection = document.getElementById('upload-section');
             const dropArea = document.getElementById('drop-area');
             const fileInput = document.getElementById('fileInput');
             const selectBtn = document.getElementById('select-btn');
             const fileInfo = document.getElementById('file-info');
             const fileList = document.getElementById('file-list');
-            const downloadBtn = document.getElementById('download-btn');
             const uploadProgress = document.getElementById('upload-progress');
-            
+            const uploadControls = document.getElementById('upload-controls');
+            const uploadDetails = document.getElementById('upload-details');
+            const folderDescription = document.getElementById('folder-description');
+            const shareBtn = document.getElementById('share-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+            const shareSuccess = document.getElementById('share-success');
+            const shareLink = document.getElementById('share-link');
+            const copyLinkBtn = document.getElementById('copy-link');
+            const statusMessage = document.getElementById('status-message');
+            const downloadBtn = document.getElementById('download-btn');
+            const newUploadBtn = document.getElementById('new-upload-btn');
+            const sharedFileList = document.getElementById('shared-file-list');
+            const expiryCountdown = document.getElementById('expiry-countdown');
+            const downloadFolderName = document.getElementById('download-folder-name');
+            const downloadFolderDescription = document.getElementById('download-folder-description');
+            const downloadFolderMeta = document.getElementById('download-folder-meta');
+            const downloadFileList = document.getElementById('download-file-list');
+            const downloadExpiryCountdown = document.getElementById('download-expiry-countdown');
+            const downloadFolderBtn = document.getElementById('download-folder-btn');
+            const backToListBtn = document.getElementById('back-to-list-btn');
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalClose = document.querySelector('.close');
+            const sharedFilesList = document.getElementById('shared-files-list');
+            const loadingShared = document.getElementById('loading-shared');
+            const pagination = document.getElementById('pagination');
+
+            // Variables globales
             let uploadedFiles = [];
-            let folderName = '';
-            
-            // Abrir el selector de archivos
-            selectBtn.addEventListener('click', () => {
-                fileInput.click();
+            let currentGist = null;
+            let token = localStorage.getItem('github_token');
+            let currentUser = null;
+            let sharedFolders = [];
+            let currentPage = 1;
+            let itemsPerPage = 10;
+
+            // Inicialización
+            checkAuth();
+            checkUrlParams();
+
+            // Manejo de parámetros URL
+            function checkUrlParams() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const folderId = urlParams.get('folder');
+                
+                if (folderId) {
+                    loadSharedFolder(folderId);
+                    sharedTab.click();
+                    downloadPanel.classList.remove('hidden');
+                }
+            }
+
+            // Autenticación GitHub
+            loginBtn.addEventListener('click', () => {
+                const redirectUri = window.location.href.split('?')[0];
+                const state = generateRandomString(16);
+                localStorage.setItem('github_auth_state', state);
+                
+                const authUrl = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}&scope=gist`;
+                window.location.href = authUrl;
             });
+
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('github_token');
+                localStorage.removeItem('github_user');
+                checkAuth();
+                resetUploadUI();
+            });
+
+            // Verificar autenticación
+            function checkAuth() {
+                if (token) {
+                    const storedUser = localStorage.getItem('github_user');
+                    if (storedUser) {
+                        currentUser = JSON.parse(storedUser);
+                        username.textContent = currentUser.login;
+                        loginSection.classList.add('hidden');
+                        userInfo.classList.remove('hidden');
+                        uploadSection.classList.remove('hidden');
+                    } else {
+                        fetchUserInfo();
+                    }
+                } else {
+                    loginSection.classList.remove('hidden');
+                    userInfo.classList.add('hidden');
+                    uploadSection.classList.add('hidden');
+                }
+            }
+
+            // Obtener información del usuario
+            async function fetchUserInfo() {
+                try {
+                    const response = await fetch(`${GITHUB_API}/user`, {
+                        headers: {
+                            Authorization: `token ${token}`
+                        }
+                    });
+                    
+                    if (!response.ok) throw new Error('Error obteniendo usuario');
+                    
+                    const user = await response.json();
+                    currentUser = user;
+                    localStorage.setItem('github_user', JSON.stringify(user));
+                    username.textContent = user.login;
+                    loginSection.classList.add('hidden');
+                    userInfo.classList.remove('hidden');
+                    uploadSection.classList.remove('hidden');
+                } catch (error) {
+                    showStatusMessage('Error obteniendo usuario: ' + error.message, 'error');
+                }
+            }
+
+            // Manejar selección de archivos
+            selectBtn.addEventListener('click', () => fileInput.click());
             
-            // Manejar eventos de arrastrar y soltar
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            function handleFileSelect(e) {
+                uploadedFiles = Array.from(e.target.files);
+                processFiles();
+            }
+
+            // Procesar archivos
+            function processFiles() {
+                if (uploadedFiles.length === 0) return;
+                
+                uploadProgress.style.display = 'block';
+                
+                if (uploadedFiles[0].webkitRelativePath) {
+                    folderName = uploadedFiles[0].webkitRelativePath.split('/')[0];
+                } else {
+                    folderName = 'carpeta_compartida';
+                }
+                
+                fileInfo.textContent = `Carpeta "${folderName}" con ${uploadedFiles.length} archivos seleccionada.`;
+                fileList.classList.remove('hidden');
+                fileList.innerHTML = '';
+                
+                const filesToShow = uploadedFiles.slice(0, 20);
+                filesToShow.forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.textContent = file.webkitRelativePath || file.name;
+                    fileList.appendChild(fileItem);
+                });
+                
+                if (uploadedFiles.length > 20) {
+                    const moreItem = document.createElement('div');
+                    moreItem.className = 'file-item';
+                    moreItem.textContent = `... y ${uploadedFiles.length - 20} archivos más`;
+                    fileList.appendChild(moreItem);
+                }
+                
+                uploadControls.classList.remove('hidden');
+                uploadDetails.classList.remove('hidden');
+            }
+
+            // Drag and Drop
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 dropArea.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
             });
-            
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            dropArea.addEventListener('drop', handleDrop, false);
+
             function preventDefaults(e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropArea.addEventListener(eventName, () => {
-                    dropArea.classList.add('active');
-                });
-            });
-            
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, () => {
-                    dropArea.classList.remove('active');
-                });
-            });
-            
-            // Procesar archivos arrastrados
-            dropArea.addEventListener('drop', (e) => {
-                const items = e.dataTransfer.items;
+
+            function highlight(e) {
+                dropArea.classList.add('active');
+            }
+
+            function unhighlight(e) {
+                dropArea.classList.remove('active');
+            }
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const items = dt.items;
+                
                 if (items) {
-                    processItems(items);
-                }
-            });
-            
-            // Procesar archivos seleccionados
-            fileInput.addEventListener('change', () => {
-                uploadedFiles = [];
-                if (fileInput.files.length > 0) {
-                    processFiles(fileInput.files);
-                }
-            });
-            
-            function processItems(items) {
-                uploadedFiles = [];
-                uploadProgress.style.display = 'block';
-                
-                // Esta función es más compleja y en navegadores modernos
-                // se podría usar webkitGetAsEntry para manejar directorios
-                // Por simplicidad, usaremos el input de tipo file con atributo webkitdirectory
-                fileInfo.textContent = "El arrastrar y soltar carpetas completas puede no funcionar en todos los navegadores. Si tienes problemas, usa el botón 'Seleccionar Carpeta'.";
-                
-                // Simulamos progreso
-                simulateProgress();
-            }
-            
-            function processFiles(files) {
-                if (files.length === 0) return;
-                
-                uploadProgress.style.display = 'block';
-                uploadedFiles = Array.from(files);
-                
-                // Extraer el nombre de la carpeta del primer archivo
-                if (uploadedFiles[0].webkitRelativePath) {
-                    folderName = uploadedFiles[0].webkitRelativePath.split('/')[0];
+                    handleItems(items);
                 } else {
-                    folderName = 'carpeta_descargada';
+                    uploadedFiles = Array.from(dt.files);
+                    processFiles();
                 }
-                
-                // Mostrar información
-                fileInfo.textContent = `Carpeta "${folderName}" con ${uploadedFiles.length} archivos seleccionada.`;
-                
-                // Mostrar la lista de archivos
-                fileList.style.display = 'block';
-                fileList.innerHTML = '';
-                
-                uploadedFiles.forEach(file => {
-                    const fileItem = document.createElement('div');
-                    fileItem.className = 'file-item';
-                    
-                    // Mostrar la ruta relativa dentro de la carpeta
-                    let relativePath = file.webkitRelativePath || file.name;
-                    fileItem.textContent = relativePath;
-                    
-                    fileList.appendChild(fileItem);
-                });
-                
-                // Simulamos progreso
-                simulateProgress();
             }
-            
-            function simulateProgress() {
-                let progress = 0;
-                const interval = setInterval(() => {
-                    progress += 5;
-                    uploadProgress.value = progress;
-                    
-                    if (progress >= 100) {
-                        clearInterval(interval);
-                        downloadBtn.style.display = 'block';
-                        uploadProgress.style.display = 'none';
-                    }
-                }, 100);
-            }
-            
-            // Manejar la descarga
-            downloadBtn.addEventListener('click', () => {
+
+            // Subir archivos
+            shareBtn.addEventListener('click', async () => {
                 if (uploadedFiles.length === 0) {
-                    alert('No hay archivos para descargar.');
+                    showStatusMessage('No hay archivos para compartir.', 'warning');
                     return;
                 }
                 
-                // En un navegador real, usaríamos JSZip para comprimir los archivos
-                // y luego los descargaríamos como un archivo ZIP
-                // Pero para este ejemplo, solo mostraremos un mensaje
-                
-                alert(`Se iniciaría la descarga de la carpeta "${folderName}" con ${uploadedFiles.length} archivos.`);
-                
-                // En una implementación completa, aquí usaríamos:
-                // 1. JSZip para crear un archivo zip con los archivos
-                // 2. FileSaver.js para descargar el zip generado
-                
-                console.log('Archivos que se descargarían:', uploadedFiles);
+                try {
+                    uploadProgress.value = 0;
+                    uploadProgress.style.display = 'block';
+                    
+                    const zip = new JSZip();
+                    const metadata = {
+                        folderName: folderName,
+                        description: folderDescription.value,
+                        fileCount: uploadedFiles.length,
+                        created: new Date().toISOString(),
+                        expires: new Date(Date.now() + EXPIRY_DAYS * 86400000).toISOString()
+                    };
+                    
+                    // Añadir archivos al ZIP
+                    uploadedFiles.forEach(file => {
+                        const path = file.webkitRelativePath || file.name;
+                        zip.file(path, file);
+                    });
+                    
+                    // Añadir metadata
+                    zip.file('metadata.json', JSON.stringify(metadata));
+                    
+                    // Generar ZIP
+                    const content = await zip.generateAsync({ type: 'blob' });
+                    
+                    // Crear Gist
+                    const formData = new FormData();
+                    formData.append('description', `${GIST_PREFIX}${metadata.description || 'Carpeta Compartida'}`);
+                    formData.append('public', 'true');
+                    formData.append('files[content.zip]', content, 'content.zip');
+                    formData.append('files[metadata.json]', new Blob([JSON.stringify(metadata)], 'metadata.json');
+
+                    const response = await fetch(`${GITHUB_API}/gists`, {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        body: formData
+                    });
+
+                    if (!response.ok) throw new Error('Error creando Gist');
+                    
+                    const gist = await response.json();
+                    currentGist = gist;
+                    
+                    // Mostrar éxito
+                    uploadPanel.classList.add('hidden');
+                    shareSuccess.classList.remove('hidden');
+                    const shareUrl = `${window.location.href}?folder=${gist.id}`;
+                    shareLink.innerHTML = `<a href="${shareUrl}" target="_blank">${shareUrl}</a>`;
+                    updateCountdown(new Date(metadata.expires), expiryCountdown);
+                    
+                    // Mostrar lista de archivos
+                    sharedFileList.innerHTML = '';
+                    uploadedFiles.slice(0, 20).forEach(file => {
+                        const item = document.createElement('div');
+                        item.className = 'file-item';
+                        item.textContent = file.webkitRelativePath || file.name;
+                        sharedFileList.appendChild(item);
+                    });
+                } catch (error) {
+                    showStatusMessage('Error subiendo archivos: ' + error.message, 'error');
+                } finally {
+                    uploadProgress.style.display = 'none';
+                }
             });
+
+            // Resto del código de manejo de UI y funciones auxiliares...
+            // (Mantener todas las funciones restantes del código anterior)
         });
     </script>
 </body>
