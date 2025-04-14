@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subir y Descargar Carpetas</title>
+    <title>Subir y Compartir Carpetas</title>
     <style>
         :root {
             --primary-color: #3498db;
@@ -165,11 +165,6 @@
             color: #e74c3c;
         }
 
-        #downloadBtn {
-            display: none;
-            margin-top: 1rem;
-        }
-
         .progress-container {
             width: 100%;
             background-color: #f0f0f0;
@@ -183,6 +178,46 @@
             background-color: var(--primary-color);
             width: 0%;
             transition: width 0.3s ease;
+        }
+
+        .share-section {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .share-link {
+            display: block;
+            padding: 0.5rem;
+            margin: 1rem 0;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+
+        .shared-files-section {
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
         }
 
         @media (max-width: 768px) {
@@ -206,30 +241,48 @@
 </head>
 <body>
     <div class="container">
-        <h1>Subir y Descargar Carpetas</h1>
+        <h1>Subir y Compartir Carpetas</h1>
         
-        <div class="upload-section">
-            <div id="uploadArea" class="upload-area">
-                <div class="upload-icon">📁</div>
-                <h3>Arrastra y suelta una carpeta aquí</h3>
-                <p>O haz clic para seleccionar</p>
-                <input type="file" id="fileInput" class="file-input" webkitdirectory directory multiple>
-            </div>
-            
-            <button id="uploadBtn" class="btn">Subir Carpeta</button>
-            
-            <div id="progressContainer" class="progress-container hidden">
-                <div id="progressBar" class="progress-bar"></div>
-            </div>
-            
-            <div id="message" class="message hidden"></div>
+        <div class="tab-container">
+            <div class="tab active" id="uploadTab">Subir</div>
+            <div class="tab" id="sharedTab">Archivos Compartidos</div>
         </div>
         
-        <div id="fileListContainer" class="hidden">
-            <h3>Archivos en la carpeta:</h3>
-            <div id="fileList" class="file-list"></div>
-            <div class="download-section">
-                <button id="downloadBtn" class="btn">Descargar Carpeta</button>
+        <div id="uploadContent">
+            <div class="upload-section">
+                <div id="uploadArea" class="upload-area">
+                    <div class="upload-icon">📁</div>
+                    <h3>Arrastra y suelta una carpeta aquí</h3>
+                    <p>O haz clic para seleccionar</p>
+                    <input type="file" id="fileInput" class="file-input" webkitdirectory directory multiple>
+                </div>
+                
+                <button id="uploadBtn" class="btn">Subir y Compartir Carpeta</button>
+                
+                <div id="progressContainer" class="progress-container hidden">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+                
+                <div id="message" class="message hidden"></div>
+            </div>
+            
+            <div id="fileListContainer" class="hidden">
+                <h3>Archivos en la carpeta:</h3>
+                <div id="fileList" class="file-list"></div>
+            </div>
+            
+            <div id="shareSection" class="share-section hidden">
+                <h3>Comparte esta carpeta con otros usuarios</h3>
+                <p>Usa este enlace para compartir:</p>
+                <div id="shareLink" class="share-link"></div>
+                <button id="copyLinkBtn" class="btn">Copiar Enlace</button>
+            </div>
+        </div>
+        
+        <div id="sharedContent" class="hidden">
+            <h2>Carpetas Compartidas</h2>
+            <div id="sharedFoldersList" class="file-list">
+                <p>Cargando carpetas compartidas...</p>
             </div>
         </div>
     </div>
@@ -244,11 +297,158 @@
         const message = document.getElementById('message');
         const fileListContainer = document.getElementById('fileListContainer');
         const fileList = document.getElementById('fileList');
-        const downloadBtn = document.getElementById('downloadBtn');
+        const shareSection = document.getElementById('shareSection');
+        const shareLink = document.getElementById('shareLink');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const uploadTab = document.getElementById('uploadTab');
+        const sharedTab = document.getElementById('sharedTab');
+        const uploadContent = document.getElementById('uploadContent');
+        const sharedContent = document.getElementById('sharedContent');
+        const sharedFoldersList = document.getElementById('sharedFoldersList');
         
         // Variables para almacenar archivos
         let uploadedFiles = [];
         let folderName = '';
+        let sessionId = '';
+        let sharedFolders = [];
+        
+        // Generar un ID único para la sesión 
+        // En un entorno real, esto vendría del servidor
+        function generateSessionId() {
+            return 'folder_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        // Simular almacenamiento persistente usando localStorage
+        function saveToLocalStorage() {
+            // Crear un objeto con la información de la carpeta
+            const folderInfo = {
+                id: sessionId,
+                name: folderName,
+                files: uploadedFiles.map(file => ({
+                    name: file.name,
+                    path: file.webkitRelativePath,
+                    size: file.size,
+                    type: file.type,
+                    lastModified: file.lastModified
+                })),
+                dateUploaded: new Date().toISOString()
+            };
+            
+            // Obtener carpetas existentes
+            let storedFolders = localStorage.getItem('sharedFolders');
+            let foldersArray = storedFolders ? JSON.parse(storedFolders) : [];
+            
+            // Agregar la nueva carpeta
+            foldersArray.push(folderInfo);
+            
+            // Guardar en localStorage
+            localStorage.setItem('sharedFolders', JSON.stringify(foldersArray));
+            
+            // Actualizar la lista de carpetas compartidas
+            sharedFolders = foldersArray;
+        }
+        
+        // Cargar carpetas compartidas desde localStorage
+        function loadSharedFolders() {
+            const storedFolders = localStorage.getItem('sharedFolders');
+            sharedFolders = storedFolders ? JSON.parse(storedFolders) : [];
+            displaySharedFolders();
+        }
+        
+        // Mostrar carpetas compartidas
+        function displaySharedFolders() {
+            sharedFoldersList.innerHTML = '';
+            
+            if (sharedFolders.length === 0) {
+                sharedFoldersList.innerHTML = '<p>No hay carpetas compartidas</p>';
+                return;
+            }
+            
+            sharedFolders.forEach(folder => {
+                const folderItem = document.createElement('div');
+                folderItem.className = 'file-item';
+                
+                const folderInfo = document.createElement('div');
+                folderInfo.className = 'file-name';
+                folderInfo.textContent = `${folder.name} (${folder.files.length} archivos)`;
+                
+                const dateInfo = document.createElement('div');
+                dateInfo.className = 'file-size';
+                const uploadDate = new Date(folder.dateUploaded);
+                dateInfo.textContent = uploadDate.toLocaleString();
+                
+                const viewBtn = document.createElement('button');
+                viewBtn.textContent = 'Ver';
+                viewBtn.className = 'btn';
+                viewBtn.style.marginTop = '0';
+                viewBtn.style.padding = '0.25rem 0.5rem';
+                viewBtn.style.fontSize = '0.9rem';
+                viewBtn.addEventListener('click', () => {
+                    viewSharedFolder(folder.id);
+                });
+                
+                folderItem.appendChild(folderInfo);
+                folderItem.appendChild(dateInfo);
+                folderItem.appendChild(viewBtn);
+                sharedFoldersList.appendChild(folderItem);
+            });
+        }
+        
+        // Ver una carpeta compartida específica
+        function viewSharedFolder(folderId) {
+            const folder = sharedFolders.find(f => f.id === folderId);
+            
+            if (!folder) {
+                showMessage('Carpeta no encontrada', 'error');
+                return;
+            }
+            
+            // Cambiar a la pestaña de subida para mostrar los detalles
+            switchTab('upload');
+            
+            // Llenar la información de la carpeta
+            folderName = folder.name;
+            uploadedFiles = []; // No podemos recuperar los archivos reales, pero sí la información
+            
+            // Mostrar la lista de archivos
+            fileListContainer.classList.remove('hidden');
+            fileList.innerHTML = '';
+            
+            folder.files.forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const fileName = document.createElement('div');
+                fileName.className = 'file-name';
+                fileName.textContent = file.path;
+                
+                const fileSize = document.createElement('div');
+                fileSize.className = 'file-size';
+                fileSize.textContent = formatFileSize(file.size);
+                
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(fileSize);
+                fileList.appendChild(fileItem);
+            });
+            
+            // Mostrar sección de compartir con el enlace
+            shareSection.classList.remove('hidden');
+            shareLink.textContent = window.location.origin + window.location.pathname + '?folder=' + folderId;
+            
+            showMessage(`Viendo carpeta compartida: ${folder.name}`, 'success');
+        }
+        
+        // Verificar si hay un parámetro de carpeta en la URL
+        function checkUrlForSharedFolder() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const folderId = urlParams.get('folder');
+            
+            if (folderId) {
+                // Cargar carpetas para encontrar la solicitada
+                loadSharedFolders();
+                viewSharedFolder(folderId);
+            }
+        }
         
         // Eventos para arrastrar y soltar
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -282,6 +482,8 @@
         function handleDrop(e) {
             const dt = e.dataTransfer;
             const items = dt.items;
+            
+            uploadedFiles = [];
             
             if (items) {
                 for (let i = 0; i < items.length; i++) {
@@ -317,7 +519,6 @@
                 
                 displayFileList();
                 showMessage('Carpeta seleccionada correctamente', 'success');
-                downloadBtn.style.display = 'inline-block';
             }
         }
         
@@ -339,7 +540,6 @@
             
             if (uploadedFiles.length > 0) {
                 showMessage('Carpeta seleccionada correctamente', 'success');
-                downloadBtn.style.display = 'inline-block';
             }
         }
         
@@ -393,14 +593,37 @@
             }, 3000);
         }
         
-        // Manejar el evento de subida (simulado en este caso)
+        // Cambiar entre pestañas
+        function switchTab(tab) {
+            if (tab === 'upload') {
+                uploadTab.classList.add('active');
+                sharedTab.classList.remove('active');
+                uploadContent.classList.remove('hidden');
+                sharedContent.classList.add('hidden');
+            } else {
+                uploadTab.classList.remove('active');
+                sharedTab.classList.add('active');
+                uploadContent.classList.add('hidden');
+                sharedContent.classList.remove('hidden');
+                loadSharedFolders(); // Cargar carpetas compartidas al cambiar a esa pestaña
+            }
+        }
+        
+        // Event listeners para las pestañas
+        uploadTab.addEventListener('click', () => switchTab('upload'));
+        sharedTab.addEventListener('click', () => switchTab('shared'));
+        
+        // Manejar el evento de subida
         uploadBtn.addEventListener('click', () => {
             if (uploadedFiles.length === 0) {
                 showMessage('Por favor selecciona una carpeta primero', 'error');
                 return;
             }
             
-            // Simulación de carga
+            // Generar un ID único para esta carpeta
+            sessionId = generateSessionId();
+            
+            // Mostrar progreso
             progressContainer.classList.remove('hidden');
             let progress = 0;
             
@@ -410,33 +633,40 @@
                 
                 if (progress >= 100) {
                     clearInterval(interval);
+                    
+                    // Guardar en localStorage
+                    saveToLocalStorage();
+                    
+                    // Mostrar sección de compartir
+                    shareSection.classList.remove('hidden');
+                    shareLink.textContent = window.location.origin + window.location.pathname + '?folder=' + sessionId;
+                    
+                    // Ocultar barra de progreso
                     progressContainer.classList.add('hidden');
-                    showMessage('Carpeta subida correctamente', 'success');
-                    downloadBtn.style.display = 'inline-block';
+                    
+                    showMessage('Carpeta subida y compartida correctamente', 'success');
                 }
             }, 100);
         });
         
-        // Manejar la descarga
-        downloadBtn.addEventListener('click', () => {
-            if (uploadedFiles.length === 0) {
-                showMessage('No hay archivos para descargar', 'error');
-                return;
-            }
+        // Copiar enlace al portapapeles
+        copyLinkBtn.addEventListener('click', () => {
+            const link = shareLink.textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                showMessage('Enlace copiado al portapapeles', 'success');
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+                showMessage('Error al copiar enlace', 'error');
+            });
+        });
+        
+        // Inicializar la aplicación
+        window.addEventListener('load', () => {
+            // Cargar carpetas compartidas
+            loadSharedFolders();
             
-            // En un entorno real, aquí se utilizaría una API como JSZip
-            // Para esta demostración, simularemos la descarga
-            showMessage('Preparando la descarga...', 'success');
-            
-            setTimeout(() => {
-                // En una implementación real, aquí se crearía el ZIP
-                const link = document.createElement('a');
-                link.href = '#';
-                link.download = folderName + '.zip';
-                link.click();
-                
-                showMessage('Descarga iniciada', 'success');
-            }, 1000);
+            // Verificar si hay un parámetro de carpeta en la URL
+            checkUrlForSharedFolder();
         });
     </script>
 </body>
